@@ -1,9 +1,9 @@
 dependencies:
 - name: universal-messaging
-  repository: https://npapazov.github.io/webm-azure-devops/chart-repo
+  repository: https://softwareag.github.io/webmethods-helm-collection/charts-repo
   version: 0.1.0
 - name: microservices-runtime
-  repository: https://npapazov.github.io/webm-azure-devops/chart-repo
+  repository: https://softwareag.github.io/webmethods-helm-collection/charts-repo
   version: 0.1.0
-digest: sha256:fa48f5c664ebe1b69202f421506dbee541bb265272a00efa7adae2e39c2c919a
-generated: "2020-06-01T13:31:53.1657969+03:00"
+digest: sha256:c0925532632e44a1986f948ee9b37645b8a8b7d29a1e10dd3248c4330ce53882
+generated: "2020-06-13T09:12:42.7585397+03:00"

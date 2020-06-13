@@ -7,7 +7,7 @@ appVersion: 1.16.0
 dependencies:
 - name:  universal-messaging
   version: "0.1.0"
-  repository: "sag-helm-repo"
+  repository: "@sag-helm-repo"
 - name: microservices-runtime
   version: "0.1.0"
-  repository: "sag-helm-repo"
+  repository: "@sag-helm-repo"
