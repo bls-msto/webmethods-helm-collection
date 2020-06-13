@@ -28,7 +28,7 @@ universal-messaging:
 
 global:
   solutionName: is-um
-  UMReplicaCount: 5
-  MSRReplicaCount: 6
+  UMReplicaCount: 3
+  MSRReplicaCount: 1
   UMServicePort: 9000
   ISServicePort: 5555
