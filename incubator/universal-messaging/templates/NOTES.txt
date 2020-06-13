@@ -1,0 +1,17 @@
+1. Get the application URL by running these commands:
+{{- if eq .Values.createAzLB true }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of the service and wait for the external IP to appear by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "universal-messaging.fullname" . }}-lb' and then press CTRL+C
+        Then you should use the following URl to connect to UM : nsp://<ip-address>:{{ .Values.service.port }}
+{{- end }}
+2. you can connect to application console:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "universal-messaging.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace {{ .Release.Namespace }} exec -it $POD_NAME bash
+3. Get the application URL within kubernetes cluster depending on replicaCount value: {{ .Values.replicaCount }}
+{{- $values := .Values }}
+{{- $release := .Release }}
+{{- $chart := .Chart }}
+{{- range $index := untilStep 0  ( int .Values.replicaCount )   1 }}
+nsp://{{ $release.Name }}-universal-messaging-{{ $index }}.{{ $release.Name }}-universal-messaging:{{ $values.service.port }}
+{{- end }}
+

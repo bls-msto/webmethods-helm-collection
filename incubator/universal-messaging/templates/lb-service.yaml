@@ -1,0 +1,16 @@
+{{- if eq .Values.createAzLB true }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "universal-messaging.fullname" . }}-lb
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "universal-messaging.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "universal-messaging.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+  type: LoadBalancer
+{{- end }}

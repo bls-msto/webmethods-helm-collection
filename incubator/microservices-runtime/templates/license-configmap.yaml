@@ -1,0 +1,10 @@
+{{- if .Values.externalFiles.licenseFile }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ include "microservices-runtime.fullname" . }}-license-config-map
+  namespace: {{ .Release.Namespace }}
+data:
+  licenseKey.xml: |-
+{{ .Values.externalFiles.licenseFile | indent 4 }}
+{{ end }}

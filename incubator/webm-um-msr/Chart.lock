@@ -1,0 +1,9 @@
+dependencies:
+- name: universal-messaging
+  repository: https://npapazov.github.io/webm-azure-devops/chart-repo
+  version: 0.1.0
+- name: microservices-runtime
+  repository: https://npapazov.github.io/webm-azure-devops/chart-repo
+  version: 0.1.0
+digest: sha256:fa48f5c664ebe1b69202f421506dbee541bb265272a00efa7adae2e39c2c919a
+generated: "2020-06-01T13:31:53.1657969+03:00"

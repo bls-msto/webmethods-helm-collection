@@ -1,0 +1,10 @@
+*
+*
+* SAG Internal User Repository
+*
+* Copyright (c) 2001-2019 Software AG, Darmstadt, Germany and/or Software AG USA Inc.,
+* Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+version:3.0
+*
+user:Administrator:$6a$0dE8FNe9URI6WSms+4YohQsdWRuiNpxyyaJuivikO3xjCY5d3FL49HqY11NXGTpzSAVv5GK//+sb32a1OqZcVw==
+

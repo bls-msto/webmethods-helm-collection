@@ -1,0 +1,10 @@
+1. Get the application URL by running these commands:
+{{- if eq .Values.createAzLB true }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of the service by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "microservices-runtime.fullname" . }}-lb' and then press CTRL+C
+        Then you should use the following URl to connect to MSR : http://<ip-address>:{{ .Values.service.port }}
+
+{{- end }}
+2. you can connect to application console:
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "microservices-runtime.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+ kubectl exec -it --namespace {{ .Release.Namespace }} $POD_NAME bash

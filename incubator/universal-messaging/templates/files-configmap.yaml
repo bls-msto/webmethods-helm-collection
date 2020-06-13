@@ -1,0 +1,19 @@
+{{- if .Values.files }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ include "universal-messaging.fullname" . }}-files-config-map
+  namespace: {{ .Release.Namespace }}
+data:
+  {{- $files := .Files }}
+  {{- $values := .Values }}
+{{- range $key, $val := .Values.files }}
+  {{ $key }}: |-
+{{ $files.Get (printf "files/%s" $key) | indent 4}}
+{{- end }}
+  filesLocations: |-
+{{- range $key, $val := .Values.files }}
+    {{ $key }} {{ $val }}
+{{- end -}}
+
+{{ end -}}

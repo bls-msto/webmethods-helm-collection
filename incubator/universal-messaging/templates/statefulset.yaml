@@ -1,0 +1,174 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "universal-messaging.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "universal-messaging.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 9000
+      protocol: TCP
+      name: nsp
+  selector:
+    {{- include "universal-messaging.selectorLabels" . | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "universal-messaging.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "universal-messaging.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.solutionName }}
+  replicas: {{ .Values.global.UMReplicaCount }}
+  {{- else }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  serviceName: {{ include "universal-messaging.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "universal-messaging.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "universal-messaging.selectorLabels" . | nindent 8 }}
+    spec:
+      imagePullSecrets:
+        - name: {{ include "universal-messaging.fullname" . }}-{{ .Values.imagePullSecret }}
+      serviceAccountName: {{ include "universal-messaging.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: 
+          - sh
+          - /tmp/init.sh
+          ports:
+            - name: nsp
+              containerPort: 9000
+              protocol: TCP
+          volumeMounts:
+          - name: data
+            mountPath: /opt/softwareag/UniversalMessaging/server/umserver/data
+          - name: logs
+            mountPath: /opt/softwareag/UniversalMessaging/server/umserver/logs
+          - name: configuration
+            mountPath: /opt/softwareag/common/conf
+      {{- if .Values.externalFiles.licenseFile }}
+          - name: external-files
+            mountPath: /tmp/licence.xml
+            subPath: licence.xml
+      {{- end }}
+      {{- if .Values.externalFiles.configFile }}
+          - name: external-files
+            mountPath: /tmp/config.xml
+            subPath: config.xml
+      {{- end }}
+          - name: external-files
+            mountPath: /tmp/externalFilesLocations
+            subPath: externalFilesLocations
+      {{- if .Values.files }}
+         {{ $values := .Values }}
+        {{ range $key, $val := .Values.files }}
+          - name: files-map
+            mountPath: /tmp/{{ $key }}
+            subPath: {{ $key }}
+        {{- end }}
+          - name: files-map
+            mountPath: /tmp/filesLocations
+            subPath: filesLocations
+      {{- end }}
+          env:
+          {{- if .Values.externalFiles.configURL }}
+          - name: UMconfigURL
+            value: {{ .Values.externalFiles.configURL | quote }}
+          {{- end }}
+          {{- if .Values.envVariables }}
+          {{- range $key, $val := .Values.envVariables }}
+          - name: {{ $key }}
+            value: {{ $val }}
+          {{- end }}
+          {{- end }}
+
+
+          #livenessProbe:
+          #   exec:
+          #      command:
+          #      - runUMTool.sh
+          #      - GetServerTime
+          #      - -rname=nsp://localhost:{{ .Values.port }}
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 15
+          #readinessProbe:
+          #   exec:
+          #      command:
+          #      - runUMTool.sh
+          #      - GetServerTime
+          #      - -rname=nsp://localhost:{{ .Values.port }}
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 15
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      volumes:
+#      - name: configuration
+#        persistentVolumeClaim:
+#          claimName: {{ include "universal-messaging.fullname" . }}-configuration
+#      - name: logs
+#        persistentVolumeClaim:
+#          claimName: {{ include "universal-messaging.fullname" . }}-logs
+#      - name: data
+#        persistentVolumeClaim:
+#          claimName: {{ include "universal-messaging.fullname" . }}-data
+      - name: external-files
+        configMap:
+          name: {{ include "universal-messaging.fullname" . }}-external-files-config-map
+      {{- if .Values.files }}
+      - name: files-map
+        configMap:
+          name: {{ include "universal-messaging.fullname" . }}-files-config-map
+      {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+  - metadata:
+      name: logs
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+  - metadata:
+      name: configuration
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
