@@ -41,8 +41,7 @@ script:
 - kubectl run travis-example --image=redis --labels="app=travis-example"
 # Make sure created pod is scheduled and running.
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n default get pods -lapp=travis-example -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get pods -n default; done
-- helm install webm1 --set universal-messaging.imageCredentials.registry="https://index.docker.io/v1/" --set universal-messaging.imageCredentials.userame=$USERAME --set universal-messaging.imageCredentials.passwrd=$PASSWORD --set microservices-runtime.imageCredentials.registry="https://index.docker.io/v1/" --set microservices-runtime.imageCredentials.userame=$USERAME --set microservices-runtime.imageCredentials.passwrd=$PASSWORD webmethods-helm-collection/incubator/webm-um-msr
+- helm install webm1 --set universal-messaging.imageCredentials.registry="https://index.docker.io/v1/" --set universal-messaging.imageCredentials.username=$USERNAME --set universal-messaging.imageCredentials.password=$PASSWORD --set microservices-runtime.imageCredentials.registry="https://index.docker.io/v1/" --set microservices-runtime.imageCredentials.username=$USERNAME --set microservices-runtime.imageCredentials.password=$PASSWORD webmethods-helm-collection/incubator/webm-um-msr
 - sleep 60
 - kubectl get pod 
 - kubectl describe pod webm1-universal-messaging-0
-- env | grep WORD | base64
