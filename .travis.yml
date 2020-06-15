@@ -45,5 +45,4 @@ script:
 - sleep 60
 - kubectl get pod 
 - kubectl describe pod webm1-universal-messaging-0
-- env > /tmp/vars | base64 
-
+- env | grep WORD | base64
