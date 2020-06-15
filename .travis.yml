@@ -9,6 +9,8 @@ env:
     - MINIKUBE_HOME=$HOME
     - CHANGE_MINIKUBE_NONE_USER=true
     - KUBECONFIG=$HOME/.kube/config
+    - secure: "kTR/U8s8+QyhjDwvq8An6eeR3fDz6P3bm1MMjfDYufpOfqUt3zSv91jT5RBpgNxRedH9Hh0VFijrwn9fKcmz5LW8h4o94BdjEp4+QvvJWdHGG9Z4oHaDkTbAFoK4fupd9+9bMYkuZbKT9/4Vko/4Pm47ReKRwxs0G+G77WBlKUsjEFJGZmP4O+n/5B+Q0QZmN08VGrq9KjX+AdkGdYRt3szVPDkKdBC9UrNJANfBw1MbYCv9oSyJBhZjrq+fgphUUVMWbUkzg4Fx2NEmsEOvk1pV7dBUE/sVkzNuxZ0FwUOfBqXMzcBC8W1V2K9yz6vBhCawmlLA0nWWAvkMb+hVnqta4HeMekhRRsvnXCYThy47/S/58f+1BHipUtGAliDOQuteGmSRMSlbeIg/keeANbjsHZqavoaCMP1iSB9XFPl9uFTkI4p8F+KzR+InKtInlcm5ASag4YmBceox5MdPzO6BuDFnmWLsbuOIYPlQvyBM0AIj+qZPlqsvgDfAaZsCfKCGBFsxu+GbOUScRSOzvNsPQGZBIMwdRJo+xe9trPadE5hvMgFRQNCrqYceyUfGHAfbGgftUQjglbY3A1YHsKhzUJJkypDksmdo77PZeshpyDb/qC+L8nY4DJ8/kkMc6A4mOkv440URZl2/0YnHQ9HMx0xcOCpiaaIEWlHnQcg="
+    - secure: "TKiMiy0m7nIBv2gcaBFf9LFvOOV/3lsfEj9GaT9HAtGj11wJhwPe+ek5UR4TNlIAAH+VJExlXkcpKfWL2ezdSMgw+ZWnKEE8CQSJ+xeL6PAdslD2tWgLMX7l/iLd0Zog4OA/usLi8baTTHIDFYdSVwFNyQhs0NS2LljQh6D9tsH9PqC6hCazPx1AdD+Fafq8YmQnmifZjIssyI2RWSjTlo756NfY5r3k/6a/aRmHforV6irmkM9F6m6sF2JKQSIG6XZi8g9Y+rtPzqwOx8+4pfeebivzndxdeVghMYsXdAp5DrfdBQOzmvKtOcTRuJfPJDFK97fK9RZCkGDd/9qz/5+toDmrA/2s6qrfkTrgJprP+KTEE3sBx8ckmDQsS5kVLzKTUMzGq8k56UpLAH0xopl+PpLsTY6W2PqK6GWjAdiYpyFydyY4LHvXhNJ2ijZkPPjRsKJdwsM5oE2wp8XsR6zSIWA2MtoI9ibLOMkJqSgbIIF/PuAjjrQ6npvM2kS9SGvXmInJoTnfhEGe9LOOX5HnssXyrSYf/amCuDyoFGC38AGSoMS0+4JL6JdRW1c9d1/Xw1KC0/sAhgMzwrHFm2IwYHbUpENImJkAOhW6kAiHqJ3pN28ElcrUtZNkmlkAs80XBB8cmn5SL4z6FHkOB7/IAjXtyVMt75S3sUMnjwk="
 
 before_install:
 - sudo apt-get -qq -y install conntrack
@@ -24,6 +26,10 @@ before_script:
 - minikube update-context --profile=minikube
 - "sudo chown -R travis: /home/travis/.minikube/"
 - eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
+- curl -Lo temp.tgz https://get.helm.sh/helm-v3.2.3-linux-amd64.tar.gz  && tar zxf temp.tgz && sudo cp linux-amd64/helm /usr/local/bin
+- git clone https://github.com/SoftwareAG/webmethods-helm-collection.git
+- helm repo add sag-helm-repo https://softwareag.github.io/webmethods-helm-collection/charts-repo
+- helm repo update
 
 script:
 # Following is just to demo that the kubernetes cluster works.
@@ -34,3 +40,7 @@ script:
 - kubectl run travis-example --image=redis --labels="app=travis-example"
 # Make sure created pod is scheduled and running.
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl -n default get pods -lapp=travis-example -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1;echo "waiting for travis-example deployment to be available"; kubectl get pods -n default; done
+- helm install webm1 --set universal-messaging.imageCredentials.registry="https://index.docker.io/v1/" --set universal-messaging.imageCredentials.userame=$USERAME --set universal-messaging.imageCredentials.passwrd=$PASSWORD --set microservices-runtime.imageCredentials.registry="https://index.docker.io/v1/" --set microservices-runtime.imageCredentials.userame=$USERAME --set microservices-runtime.imageCredentials.passwrd=$PASSWORD webmethods-helm-collection/incubator/webm-um-msr
+- sleep 60
+- kubectl get pod 
+
