@@ -30,6 +30,7 @@ before_script:
 - git clone https://github.com/SoftwareAG/webmethods-helm-collection.git
 - helm repo add sag-helm-repo https://softwareag.github.io/webmethods-helm-collection/charts-repo
 - helm repo update
+- helm dependency update webmethods-helm-collection/incubator/webm-um-msr
 
 script:
 # Following is just to demo that the kubernetes cluster works.
