@@ -28,7 +28,7 @@ before_script:
 - eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
 - curl -Lo temp.tgz https://get.helm.sh/helm-v3.2.3-linux-amd64.tar.gz  && tar zxf temp.tgz && sudo cp linux-amd64/helm /usr/local/bin
 - git clone https://github.com/SoftwareAG/webmethods-helm-collection.git
-- helm repo add sag-helm-repo https://softwareag.github.io/webmethods-helm-collection/charts-repo
+- helm repo add sag-helm-repo https://softwareag.github.io/webmethods-helm-collection/charts-repo/incubator
 - helm repo update
 - helm dependency update webmethods-helm-collection/incubator/webm-um-msr
 
