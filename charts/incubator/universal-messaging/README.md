@@ -16,10 +16,10 @@ One should update the repository contents by running:
 ```bash
 $ helm repo update
 ```
-### Checkig out the product in [dockerhub] (https://hub.docker.com)
-Since Universal Messaging image the chart is using is hosted on [dockerhub] (https://hub.docker.com) there is a short procedure that should be followed:
+### Checkig out the product in [dockerhub](https://hub.docker.com)
+Since Universal Messaging image the chart is using is hosted on [dockerhub](https://hub.docker.com) there is a short procedure that should be followed:
 - Log in to [dockerhub] (https://hub.docker.com)
-- Find the Universal Messaging image [here] (https://hub.docker.com/_/softwareag-universalmessaging-server)
+- Find the Universal Messaging [image here](https://hub.docker.com/_/softwareag-universalmessaging-server)
 - click on *proceed to Checkout* and agree with the licenses and terms
 - Then one should either prepare a yaml file with docker credentials
 ### simple chart installation
