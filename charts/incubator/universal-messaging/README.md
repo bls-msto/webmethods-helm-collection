@@ -60,8 +60,8 @@ The UM is running as stateful set and because of the specific ot UM itself there
 nsp://um1-universal-messaging-0.um1-universal-messaging:9000
 nsp://um1-universal-messaging-1.um1-universal-messaging:9000
 ...
-`
-where um1 is tha name of the helm chart release.
+```
+where um1 is the name of the helm chart release.
 If one wants to use UM Enterprise Manager to check the UM status and manage the product, one can use port frwarding to connect to each instance:
 ```bash
  kubectl port-forward  um1-universal-messaging-0 9000:9000
