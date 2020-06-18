@@ -9,9 +9,10 @@ image:
   pullPolicy: Always
 
 imagePullSecret: "regcreds"
-imageCredentials.registry: "https://index.docker.io/v1/"
-imageCredentials.username: "xx"
-imageCredentials.password: "xx"
+imageCredentials:
+  registry: "https://index.docker.io/v1/"
+  username: ""
+  password: ""
 
 solutionName: ""
 
