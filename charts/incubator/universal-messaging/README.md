@@ -53,3 +53,17 @@ helm install um1 -f ~/docker-credentials.yaml --set-file externalFiles.licenseFi
 ``` bash
 helm install um1 -f ~/docker-credentials.yaml --set-file externalFiles.configFile="~/my-custom-config.xml" sag-helm-repo/universal-messaging
 ```
+## Consuming the UM messaging service
+Since the idea of UM chart is to run UM in a way that UM service will be consumed by other containers in the same cluster/namespace no external loadbalancer will be created and the service will not be accessible from outside of the cluster.
+The UM is running as stateful set and because of the specific ot UM itself there is no need of load balancing service in front of the instances each of it can be consumed on the following urls:
+```
+nsp://um1-universal-messaging-0.um1-universal-messaging:9000
+nsp://um1-universal-messaging-1.um1-universal-messaging:9000
+...
+`
+where um1 is tha name of the helm chart release.
+If one wants to use UM Enterprise Manager to check the UM status and manage the product, one can use port frwarding to connect to each instance:
+```bash
+ kubectl port-forward  um1-universal-messaging-0 9000:9000
+```
+Where *um1* is the name of helm-release and the lefthand side of the tuple 9000:9000 is the port on ones dev/admin host. Then one can access the desired instance on localhost:9000 using UM Enterprise Manager
