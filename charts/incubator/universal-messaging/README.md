@@ -1,5 +1,5 @@
 # Universal Messaging
-This chart deploys a [Universal Messaging] (https://www.softwareag.com/corporate/products/az/universal_messaging/default.html) instance or number of instances on a Kubernetes cluster using Helm package manager.
+This chart deploys a [Universal Messaging](https://www.softwareag.com/corporate/products/az/universal_messaging/default.html) instance or number of instances on a Kubernetes cluster using Helm package manager.
 
 ## Prerequisites
 - Kubernetes version x.x (TBD)
