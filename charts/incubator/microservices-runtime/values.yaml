@@ -28,7 +28,7 @@ envVariables:
   MSR_JDBC_URL: "jdbc:mysql://mysql:3306/webm" 
   MSR_JDBC_PASSWORD: "webm"
   MSR_JDBC_USER: "webm"
-  MSR_JNDI_PROVIDER_URL: "nsp\\://um1-universal-messaging\\:9000"
+  MSR_JNDI_PROVIDER_URL: "nsp://um1-universal-messaging:9000"
   JAVA_DEBUGGER_OPTS: "-Dcom.softwareag.um.jndi.cf.url.override=true"
   #MSR_AUTODEPLOY_FLAG: "false"
   #MSR_AUTODEPLOY_HOTDEPLOY_FLAG: "false"
