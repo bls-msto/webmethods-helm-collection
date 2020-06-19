@@ -1,5 +1,5 @@
 # Universal Messaging
-This chart deploys one or several [Universal Messaging](https://www.softwareag.com/corporate/products/az/universal_messaging/default.html) instances on a Kubernetes cluster using Helm package manager.
+This chart deploys one or several [Universal Messaging](https://www.softwareag.com/corporate/products/az/universal_messaging/default.html) instances on a Kubernetes cluster using the Helm package manager.
 
 ## Prerequisites
 - Provision a Kubernetes cluster version x.x (TBD)
@@ -34,7 +34,8 @@ Install the chart with a command, in which you specify a release name for the Un
 helm install um1 --set imageCredentials.username="<dockerhub_username>" --set imageCredentials.password="<dockerhub_password>"  sag-helm-repo/universal-messaging
 ```
 The command deploys a single instance of Universal Messaging, which is already set up with the initial configuration required for Universal Messaging.
-You can also use one of the following advanced options to install the chart (note that you can also combine the options in one command):
+
+You can also use one of the following advanced options to install the chart (note that you can combine the options in one command):
 - To avoid exposing the user credentials on the command line, you can create an YAML file, for example "~/docker-credentials.yaml", with the following parameters:
 ```yaml
 imageCredentials:
