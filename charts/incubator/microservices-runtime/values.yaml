@@ -7,6 +7,7 @@ replicaCount: 1
 image:
   #repository: daerepository03.eur.ad.sag:4443/ccdevops/pcmsr
   repository: store/softwareag/webmethods-microservicesruntime
+  tag: ""
   pullPolicy: Always
 
 imagePullSecret: "regcreds"
