@@ -103,22 +103,22 @@ spec:
           {{- end }}
 
 
-          #livenessProbe:
-          #   exec:
-          #      command:
-          #      - runUMTool.sh
-          #      - GetServerTime
-          #      - -rname=nsp://localhost:{{ .Values.port }}
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 15
-          #readinessProbe:
-          #   exec:
-          #      command:
-          #      - runUMTool.sh
-          #      - GetServerTime
-          #      - -rname=nsp://localhost:{{ .Values.port }}
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 15
+          livenessProbe:
+             exec:
+                command:
+                - runUMTool.sh
+                - GetServerTime
+                - -rname=nsp://localhost:9000
+             initialDelaySeconds: 30
+             periodSeconds: 15
+          readinessProbe:
+             exec:
+                command:
+                - runUMTool.sh
+                - GetServerTime
+                - -rname=nsp://localhost:9000
+             initialDelaySeconds: 30
+             periodSeconds: 15
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
