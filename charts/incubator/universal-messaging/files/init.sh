@@ -38,6 +38,7 @@ create_persistent_folder
 copy_files
 copy_external_files
 link_license
+cd /
 start_UM
 PID_TO_WAIT=$!
 # put custom code that should be executed after the UM has been started here

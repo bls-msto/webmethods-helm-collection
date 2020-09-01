@@ -3,9 +3,9 @@ entries:
   microservices-runtime:
   - apiVersion: v2
     appVersion: 10.5.0.0
-    created: "2020-06-30T16:19:57.9003227+03:00"
+    created: "2020-09-01T10:03:20.7892098+03:00"
     description: A Helm chart for Kubernetes
-    digest: 005a3ac409edb379c92b02fed5a7f6a10b0354739b5727c3329595d6d69bd532
+    digest: 62d4270a162295ab5e3fb9c7e90bc3995e05539a524da95c12c843f5df4d02a4
     name: microservices-runtime
     type: application
     urls:
@@ -14,12 +14,12 @@ entries:
   universal-messaging:
   - apiVersion: v2
     appVersion: 10.5.0.4
-    created: "2020-06-30T16:19:57.9012547+03:00"
+    created: "2020-09-01T10:03:20.7924691+03:00"
     description: A Helm chart for Kubernetes
-    digest: d7763c972f7834f08e8bd2b81eec9b7c6006b9d826bfc7d16dbe251efd9627d2
+    digest: 06fd72ea80ddb99cac2fceb7263f695e51936f991c88e753b685e0608265a7d5
     name: universal-messaging
     type: application
     urls:
     - https://softwareag.github.io/webmethods-helm-collection/charts-repo/incubator/universal-messaging-0.1.0.tgz
     version: 0.1.0
-generated: "2020-06-30T16:19:57.8962947+03:00"
+generated: "2020-09-01T10:03:20.7852543+03:00"

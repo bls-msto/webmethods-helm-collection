@@ -25,6 +25,7 @@ startMSR(){
 }
 copy_files
 download_deploy_package
+cd /
 startMSR
 PID_TO_WAIT=$!
 wait $PID_TO_WAIT
