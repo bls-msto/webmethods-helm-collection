@@ -1,0 +1,32 @@
+variables:
+  DOCKERSTORE_ACCESS_TOKEN=$(dockerstore-access-token)
+  AZURECR_ACCESS_TOKEN=$(azurecr-access-token)
+trigger:
+- bpas-azure
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+    docker login -u bpas -p $DOCKERSTORE_ACCESS_TOKEN
+    cd containers
+    export TAG=10.5
+    export UM_TAG=10.5
+    export MSR_TAG=10.5
+    export LOCAL_REG=letswebmacr.azurecr.io/ccdevops
+    docker-compose build --force-rm --no-cache
+
+  displayName: 'build images'
+- script: |
+    docker login letswebmacr.azurecr.io -u 00000000-0000-0000-0000-000000000000 -p $AZURECR_ACCESS_TOKEN
+    export TAG=10.5
+    export UM_TAG=10.5
+    export MSR_TAG=10.5
+    export LOCAL_REG=letswebmacr.azurecr.io/ccdevops
+    docker-compose push
+  displayName: 'Push images'
+
