@@ -1,6 +1,6 @@
 variables:
-  DOCKERSTORE_ACCESS_TOKEN=$(dockerstore-access-token)
-  AZURECR_ACCESS_TOKEN=$(azurecr-access-token)
+  DOCKERSTORE_ACCESS_TOKEN: $(dockerstore-access-token)
+  AZURECR_ACCESS_TOKEN: $(azurecr-access-token)
 trigger:
 - bpas-azure
 
