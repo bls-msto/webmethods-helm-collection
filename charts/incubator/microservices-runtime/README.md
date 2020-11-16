@@ -1,15 +1,15 @@
-# Universal Messaging
-This chart deploys one or several [Universal Messaging](https://www.softwareag.com/corporate/products/az/universal_messaging/default.html) instances on a Kubernetes cluster using the Helm package manager.
+# Microservices Runtime
+This chart deploys one or several [Microservices Runtime](https://hub.docker.com/_/softwareag-webmethods-microservicesruntime) instances on a Kubernetes cluster using the Helm package manager.
 
 ## Prerequisites
 - Provision a Kubernetes cluster version x.x (TBD)
 - Install and configure Helm 3 (installs the charts without using Tiller)
 - Enable support for persistent volume
 
-## Deploying the Universal Messaging chart
+## Deploying the Microservices Runtime chart
 To deploy the chart, you must:
 1. Add the webmethods-helm-collection chart repository to the local Helm.
-2. Download the Universal Messaging image from Docker Hub.
+2. Download the Microservices Runtime image from Docker Hub
 3. Install the chart.
 
 ### Add the webmethods-helm-collection chart repository to the local Helm
@@ -22,16 +22,16 @@ To update the repository contents, run the following command:
 ```bash
 $ helm repo update
 ```
-### Download the Universal Messaging image from [dockerhub](https://hub.docker.com)
-The docker image for Universal Messaging that you must use with the chart is stored on [dockerhub](https://hub.docker.com). To download the image:
+### Download the Microservices Runtime image from [dockerhub](https://hub.docker.com)
+The docker image for Microservices Runtime that you must use with the chart is stored on [dockerhub](https://hub.docker.com). To download the image:
 1. Log in to [dockerhub](https://hub.docker.com)
-2. Locate the Universal Messaging [image here](https://hub.docker.com/_/softwareag-universalmessaging-server)
+2. Locate the Microservices Runtime [image here](https://hub.docker.com/_/softwareag-webmethods-microservicesruntime)
 3. Click the **Proceed to Checkout** button and accept the license terms and conditions.
 
 ### Install the chart
-Install the chart with a command, in which you specify a release name for the Universal Messaging instance, for example "um1", the user credentials that you specified when downloading the image from Docker Hub, and the path to the Universal Messaging chart:
+Install the chart with a command, in which you specify a release name for the Microservices Runtime instance, for example "msr1", the user credentials that you specified when downloading the image from Docker Hub, and the path to the Microservices Runtime chart:
 ```bash
-helm install um1 --set imageCredentials.username="<dockerhub_username>" --set imageCredentials.password="<dockerhub_password>"  sag-helm-repo/universal-messaging
+helm install um1 --set imageCredentials.username="<dockerhub_username>" --set imageCredentials.password="<dockerhub_password>"  sag-helm-repo/microservices-runtime
 ```
 The command deploys a single instance of Universal Messaging, which is already set up with the initial configuration required for Universal Messaging.
 
