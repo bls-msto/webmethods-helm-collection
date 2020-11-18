@@ -33,7 +33,7 @@ Install the chart with a command, in which you specify a release name for the Mi
 ```bash
 helm install um1 --set imageCredentials.username="<dockerhub_username>" --set imageCredentials.password="<dockerhub_password>"  sag-helm-repo/microservices-runtime
 ```
-The command deploys a single instance of Universal Messaging, which is already set up with the initial configuration required for Universal Messaging.
+The command deploys a single instance of Microservices Runtime , which is already set up with the initial configuration.
 
 You can also use one of the following advanced options to install the chart (note that you can combine the options in one command):
 - To avoid exposing the user credentials on the command line, you can create an YAML file, for example "~/docker-credentials.yaml", with the following parameters:
@@ -45,33 +45,74 @@ imageCredentials:
 ```
 and then use the YAML file when installing the chart as follows:
 ```bash
-helm install um1 -f ~/docker-credentials.yaml sag-helm-repo/universal-messaging
+helm install msr1 -f ~/docker-credentials.yaml sag-helm-repo/microservices-runtime
 ```
-- To install more than one replica:
-``` bash
-helm install um1 -f ~/docker-credentials.yaml --set replicaCount=3  sag-helm-repo/universal-messaging
-```
+
 - To provide a custom license and replace the time-limited license included in the docker image, for example to add a custom license with name "~/my-custom-license.xml":
 ``` bash
-helm install um1 -f ~/docker-credentials.yaml --set-file externalFiles.licenseFile=~/my-custom-license.xml   sag-helm-repo/universal-messaging
+helm install msr1 -f ~/docker-credentials.yaml --set-file externalFiles.licenseFile=~/my-custom-license.xml   sag-helm-repo/microservices-runtime
 ```
-- To specify a custom configuration file, for example the custom configuration file with name "~/my-custom-config.xml":
-``` bash
-helm install um1 -f ~/docker-credentials.yaml --set-file externalFiles.configFile="~/my-custom-config.xml" sag-helm-repo/universal-messaging
-```
-You can use this command for custom configurations, such as the UM realm export.
 
-## Consuming the UM messaging service
-After you deploy a Universal Messaging instance from the UM chart, the intance runs so that all other containers in the same cluster/namespace can consume the UM service. The chart does not create an external loadbalancer for the UM instance and the UM service is not accessible from outside the cluster.
-The UM instance runs as a stateful set and because Universal Messaging does not require a load balancing service for the instances, each instance can be consumed at the following URLs:
+### customization using ENV variables
+
+You can provide env variables to the container by setting them in values file or overwrite them or adding new variables by using --set flag. The chart will process them and set them in the container environment.
+
 ```
-nsp://um1-universal-messaging-0.um1-universal-messaging:9000
-nsp://um1-universal-messaging-1.um1-universal-messaging:9000
-...
+helm install msr1 -f ~/docker-credentials.yaml --set envVariables.MSR_JDBC_URL="jdbc:mysql://mysql:3306/webm" --set envVariables.CUSTOMENV_VAR="somecustomvalue" sag-helm-repo/microservices-runtime
 ```
-where "um1" is the name of the helm chart release.
-If you want to use the Enterprise Manager of Universal Messaging to check the UM status and manage the product, you can use port forwarding to connect to each instance:
-```bash
- kubectl port-forward  um1-universal-messaging-0 9000:9000
+Here are the predefined variables and their values:
+
+  * MSR_JDBC_URL: "jdbc:mysql://mysql:3306/webm" 
+  * MSR_JDBC_PASSWORD: "webm"
+  * MSR_JDBC_USER: "webm"
+  * MSR_JNDI_PROVIDER_URL: "nsp://um1-universal-messaging:9000"
+  * JAVA_DEBUGGER_OPTS: "-Dcom.softwareag.um.jndi.cf.url.override=true"
+  * MSR_PACKAGE_URLS: ""
+
+
+### customization using helm chart values file
+
+You can provide or set values in the values.yaml file , create custom one with required values and structure or set them using --set flag
 ```
-where "um1" is the name of the helm chart release and the left-hand side of the tuple 9000:9000 is the port of the dev/admin host. After running the command, you can access the UM instance on "localhost:9000", using Enterprise Manager.
+helm install msr1 -f ~/customvalues.yaml --set image.repository=daerepository03.eur.ad.sag:4443/ccdevops/pcmsr --set image.tag=10.5.0.0 sag-helm-repo/microservices-runtime
+```
+Here is the complete list of values and their description:
+**you can specify custom docker image**
+  * image.repository
+  * image.tag
+  * image.pullPolicy
+**Set the credentials used for pulling the image if needed**
+  * imageCredentials.registry: "https://index.docker.io/v1/"
+  * imageCredentials.username: ""
+  * imageCredentials.password: ""
+**The kubernetes service's type and port to be used in order to access the pod with MSR**  
+  * service.type: ClusterIP
+  * service.port: 5555
+  
+**If this is going to be run on Azure Kubernetes Services (AKS) and you want to make MSR endpoint to be exposed to the world**
+  * createAzLB: true
+**If there is no load balancing k8s service, but want t expose the MSR endpoint using nginx ingress controller** 
+Generally this is mutually exlusive with createAzLB by design, but both can coexist
+  * ingress.enabled
+  * ingress.hosts:
+    - host: msr2.ninjacloud.eur.ad.sag
+	    paths: [ "/" ]
+
+
+
+## Accessing the Microservices Runtime
+After deploting the product using helm and if it is exposed to the world it can be accessed in two ways depending wether you created LB or ingress controller
+
+### using Azure LB
+You should check the external IP address of the service once it has been created. Usually it takes a couple of minutes before externalIP is being provided after helm install command
+```
+$ kubectl get service
+NAME                            TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)          AGE
+kubernetes                      ClusterIP      10.0.0.1       <none>          443/TCP          176d
+msr1-microservices-runtime      ClusterIP      10.0.108.117   <none>          5555/TCP         6d1h
+msr1-microservices-runtime-lb   LoadBalancer   10.0.22.201    20.56.184.112   5555:31023/TCP   6d1h
+```
+So then use browser and point to: http://20.56.184.112:5555/
+
+### Uzing Ingress
+If there is an option to use ingress controller and the dns servers are configured for that then you should use the url specified in the host option as described above as url. In this example http://msr2.ninjacloud.eur.ad.sag  however
