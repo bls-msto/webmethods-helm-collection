@@ -91,7 +91,7 @@ Here is the complete list of values and their description:
   
 **If this is going to be run on Azure Kubernetes Services (AKS) and you want to make MSR endpoint to be exposed to the world**
   * createAzLB: true
-**If there is no load balancing k8s service, but want t expose the MSR endpoint using nginx ingress controller** 
+**If there is no load balancing k8s service, but want to expose the MSR endpoint using nginx ingress controller** 
 Generally this is mutually exlusive with createAzLB by design, but both can coexist
   * ingress.enabled
   * ingress.hosts:
@@ -101,7 +101,7 @@ Generally this is mutually exlusive with createAzLB by design, but both can coex
 
 
 ## Accessing the Microservices Runtime
-After deploting the product using helm and if it is exposed to the world it can be accessed in two ways depending wether you created LB or ingress controller
+After deploying the product using helm and if it is exposed to the world it can be accessed in two ways depending whether you created LB or ingress controller
 
 ### using Azure LB
 You should check the external IP address of the service once it has been created. Usually it takes a couple of minutes before externalIP is being provided after helm install command
@@ -114,5 +114,5 @@ msr1-microservices-runtime-lb   LoadBalancer   10.0.22.201    20.56.184.112   55
 ```
 So then use browser and point to: http://20.56.184.112:5555/
 
-### Uzing Ingress
+### Using Ingress
 If there is an option to use ingress controller and the dns servers are configured for that then you should use the url specified in the host option as described above as url. In this example http://msr2.ninjacloud.eur.ad.sag  however
